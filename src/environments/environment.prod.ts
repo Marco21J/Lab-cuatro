@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  apiEndpoint: 'https://lab-cuatro-api.herokuapp.com/api/v1'
 };
