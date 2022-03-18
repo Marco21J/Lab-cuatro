@@ -13,10 +13,16 @@
                             <p class="text-muted mb-4">Ingresa tus datos para acceder</p>
                             <form novalidate autocomplete="off" (ngSubmit)="onSubmit()" [formGroup]="form">
                                 <div class="form-group mb-3">
-                                    <input type="email" placeholder="Email" class="form-control shadow-sm" formControlName="email">
+                                    <input type="email" placeholder="Email" class="form-control shadow-sm" [class.is-invalid]="isEmailValid" formControlName="email">
+                                    <div class="invalid-feedback" *ngIf="isEmailValid">
+                                        {{ getErrorMessage('email') }}
+                                    </div>
                                 </div>
                                 <div class=" form-group mb-3">
-                                    <input type="password" placeholder="Conraseña" class="form-control shadow-sm" formControlName="contrasena">
+                                    <input type="password" placeholder="Conraseña" class="form-control shadow-sm" [class.is-invalid]="isContrasenaValid" formControlName="contrasena">
+                                    <div class="invalid-feedback" *ngIf="isContrasenaValid">
+                                        {{ getErrorMessage('contrasena') }}
+                                    </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-block mb-2 shadow-sm" [disabled]="form.invalid || isLoading">Entrar <i class="fas fa-spinner fa-spin ms-1" *ngIf="isLoading"></i></button>
                             </form>

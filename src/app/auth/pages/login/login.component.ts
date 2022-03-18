@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { SweetAlertService } from '../../../shared/services/sweet-alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { getErrorMessage } from '../../../common/security/validation-message/validation-message';
 
 @Component({
   selector: 'app-login',
@@ -34,13 +35,32 @@ export class LoginComponent implements OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  public get isEmailValid(): boolean {
+    const control = this.form.get('email');
+    if (control) return control.touched && control.invalid;
+    return false;
+  }
+  public get isContrasenaValid(): boolean {
+    const control = this.form.get('contrasena');
+    if (control) return control.touched && control.invalid;
+    return false;
+  }
+
+  public getErrorMessage(controlName: string): string {
+    const control = this.form.get(controlName);
+    if (control && control.errors) {
+      const error = Object.keys(control.errors);
+      return getErrorMessage(error[0], control.errors);
+    }
+    return '';
+  }
+
   public onSubmit(): void {
     if (this.form.valid) {
-      this.isLoading = true;
+      this.isLoading = true;    
       const { email, contrasena } = this.form.value;
       this.subscription.add(this.authService.login({ email, contrasena }).subscribe(data => {
         this.isLoading = false;
-        console.log(data);
         this.router.navigateByUrl('/dashboard');
       }, (e: HttpErrorResponse) => {
         this.isLoading = false;
