@@ -12,6 +12,8 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { appReducers } from './ngrx/reducer/app.reducer';
+import { HttpTokenInterceptor } from './common/interceptors/http-token.interceptor';
+import { RefreshTokenInterceptor } from './common/interceptors/refresh-token.interceptor';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { appReducers } from './ngrx/reducer/app.reducer';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: ApiPrefixInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ApiPrefixInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: RefreshTokenInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

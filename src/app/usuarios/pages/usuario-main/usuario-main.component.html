@@ -1,0 +1,62 @@
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group" role="group" aria-label="First group">
+                <a class="btn btn-success" routerLink="/dashboard/usuarios/new">
+                  Agregar <i class="fas fa-plus ms-2"></i>
+              </a>
+            </div>
+            <!-- <div class="btn-group" role="group" aria-label="Second group">
+                <button type="button" class="btn btn-danger" (click)="delete(user.id)">
+                  <i class="fas fa-trash"></i>
+              </button>
+            </div> -->
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table datatable [dtOptions]="dtOptions" class="row-border hover table w-100">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="usuarios.length !== 0">
+            <tr *ngFor="let user of usuarios">
+                <td>{{ user.nombre }} {{ user.apellidoMaterno }} {{ user.apellidoPaterno }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <!-- {{ user.status === 1 ? 'Activo' : 'Inactivo' }} -->
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" [checked]="user.status === 1" (click)="toggleStatus(user.id)">
+                        <!-- <label class="form-check-label">Default switch checkbox input</label> -->
+                    </div>
+                </td>
+                <td>{{ user.rol.nombre }}</td>
+                <td>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group me-2" role="group" aria-label="First group">
+                            <a [routerLink]="['/dashboard/usuarios/edit/', user.id]" class="btn btn-secondary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                        <div class="btn-group" role="group" aria-label="Second group">
+                            <button type="button" class="btn btn-danger" (click)="delete(user.id)">
+                              <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="usuarios.length === 0">
+            <tr>
+                <td colspan="3" class="no-data-available">No data!</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

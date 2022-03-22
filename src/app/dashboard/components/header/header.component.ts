@@ -12,18 +12,18 @@ import { Subscription } from 'rxjs';
 })
 export class HeaderComponent {
 
-  user!: ILoginResponse;
-  private subscription = new Subscription();
+  /* user!: ILoginResponse;
+  private subscription = new Subscription(); */
 
   constructor(
-    private authService: AuthService,
-    private store: Store<AppState>,
+    /* private authService: AuthService,
+    private store: Store<AppState> */
   ) {
-    this.getUser();
-    this.authService.userStatus();
+    /* this.getUser();
+    this.authService.userStatus(); */
   }
 
-  public getUser(): void {
+  /* public getUser(): void {
     this.subscription.add(this.store.select('user').subscribe(({ user }) => {
       if (user) {
         this.user = user;
@@ -33,6 +33,6 @@ export class HeaderComponent {
 
   public logout(): void {
     this.authService.logout();
-  }
+  } */
 
 }

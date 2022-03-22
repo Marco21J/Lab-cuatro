@@ -1,0 +1,68 @@
+<form novalidate autocomplete="off" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="row">
+        <div class="col-md-6">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" placeholder="Nombre" maxlength="30" [class.is-invalid]="isNombreValid" formControlName="nombre">
+            <div class="invalid-feedback" *ngIf="isNombreValid">
+                {{ getErrorMessage('nombre') }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Apellido Paterno</label>
+            <input type="text" class="form-control" placeholder="Apellido Paterno" maxlength="30" [class.is-invalid]="isApellidoPaternoValid" formControlName="apellidoPaterno">
+            <div class="invalid-feedback" *ngIf="isApellidoPaternoValid">
+                {{ getErrorMessage('apellidoPaterno') }}
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <label class="form-label">Apellido Materno</label>
+            <input type="text" class="form-control" placeholder="Appelido Materno" maxlength="30" [class.is-invalid]="isApellidoMaternoValid" formControlName="apellidoMaterno">
+            <div class="invalid-feedback" *ngIf="isApellidoPaternoValid">
+                {{ getErrorMessage('apellidoMaterno') }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input type="text" class="form-control" placeholder="Email" maxlength="50" [class.is-invalid]="isEmailValid" formControlName="email">
+            <div class="invalid-feedback" *ngIf="isEmailValid">
+                {{ getErrorMessage('email') }}
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <label class="form-label">Contraseña</label>
+            <input type="password" class="form-control" placeholder="Nombre" maxlength="20" [class.is-invalid]="isContrasenaValid" formControlName="contrasena">
+            <div class="invalid-feedback" *ngIf="isContrasenaValid">
+                {{ getErrorMessage('contrasena') }}
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Status</label>
+            <select class="form-select" [class.is-invalid]="isStatusValid" formControlName="status">
+                <option value="">Selecciona una opción</option>
+                <option *ngFor="let s of status" [value]="s.value"> {{ s.text }} </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="isStatusValid">
+                {{ getErrorMessage('status') }}
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">Rol</label>
+            <select class="form-select" [class.is-invalid]="isRolValid" formControlName="rol">
+                <option value="">Selecciona una opción</option>
+                <option *ngFor="let rol of roles" [value]="rol.id"> {{ rol.nombre }} </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="isRolValid">
+                {{ getErrorMessage('rol') }}
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success float-end" [disabled]="form.invalid || isLoading">Guardar</button>
+        </div>
+    </div>
+</form>

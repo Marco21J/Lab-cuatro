@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ILoginResponse, ILoginRequest } from '../models/interfaces';
+import { ILoginResponse, ILoginRequest, IRefreshTokenResponse, IRefreshTokenRequest } from '../models/interfaces';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
@@ -51,5 +51,34 @@ export class AuthService {
       this.sessionObject = JSON.parse(user) as ILoginResponse;
       this.store.dispatch(authActions.setUser({ usuario: this.sessionObject }));
     }
+  }
+
+  public getUserSession(): ILoginResponse {
+    let payload!: ILoginResponse;
+    const payloadJson = localStorage.getItem('user');
+    if (this.isAuthenticated() && typeof payloadJson === 'string') {
+      payload = JSON.parse(payloadJson) as ILoginResponse;
+      return payload;
+    }
+    return payload;
+  }
+
+  public refreshToken(): Observable<IRefreshTokenResponse> {
+    const userSession = this.getUserSession();
+    const refreshObj: IRefreshTokenRequest = {
+      email: userSession.email,
+      refreshToken: userSession.refreshToken,
+    };
+    return this.http.post<IRefreshTokenResponse>('/auth/refresh', refreshObj)
+      .pipe(
+        tap((data) => this.saveOnRefreshToken(data))
+      );
+  }
+
+  private async saveOnRefreshToken(refreshTokenResponse: IRefreshTokenResponse): Promise<void> {
+    const userSession = this.getUserSession();
+    userSession.accessToken = refreshTokenResponse.accessToken;
+    userSession.refreshToken = refreshTokenResponse.refreshToken;
+    this.saveSession(userSession);
   }
 }
