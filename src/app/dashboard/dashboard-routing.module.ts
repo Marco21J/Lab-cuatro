@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MainLayoutComponent } from './pages/main-layout/main-layout.component';
-import { HeaderComponent } from './components/header/header.component';
 
 const routes: Routes = [
   /* {
@@ -13,18 +12,14 @@ const routes: Routes = [
     path: '',
     component: MainLayoutComponent,
     children: [
-      /* {
+      {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'prueba'
-      }, */
-      {
-        path: 'prueba',
-        loadChildren: () => import('../prueba/prueba.module').then(m => m.PruebaModule)
+        redirectTo: 'usuarios'
       },
       {
-        path: 'salv',
-        loadChildren: () => import('../prueba/prueba.module').then(m => m.PruebaModule)
+        path: 'usuarios',
+        loadChildren: () => import('../usuarios/usuarios.module').then(m => m.UsuariosModule)
       }
     ]
   },

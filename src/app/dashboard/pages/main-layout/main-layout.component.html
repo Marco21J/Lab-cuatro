@@ -1,9 +1,11 @@
 <app-dashboard-header></app-dashboard-header>
 <div class="container-fluid">
     <div class="row">
-        <app-dashboard-sidenav></app-dashboard-sidenav>
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <app-dashboard-sidenav></app-dashboard-sidenav>
+        </nav>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
+            <router-outlet></router-outlet>
+        </main>
     </div>
-    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
-        <router-outlet></router-outlet>
-    </main>
 </div>
