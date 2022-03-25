@@ -27,7 +27,7 @@
         </thead>
         <tbody *ngIf="usuarios.length !== 0">
             <tr *ngFor="let user of usuarios">
-                <td>{{ user.nombre }} {{ user.apellidoMaterno }} {{ user.apellidoPaterno }}</td>
+                <td>{{ user.nombre }} {{ user.apellidoPaterno }} {{ user.apellidoMaterno }}</td>
                 <td>{{ user.email }}</td>
                 <td>
                     <!-- {{ user.status === 1 ? 'Activo' : 'Inactivo' }} -->

@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  /* apiEndpoint: 'https://lab-cuatro-api.herokuapp.com/api/v1', */
-  apiEndpoint: 'http://localhost:3000/api/v1',
+  apiEndpoint: 'https://lab-cuatro-api.herokuapp.com/api/v1',
+  /* apiEndpoint: 'http://localhost:3000/api/v1', */
 };
 
 /*

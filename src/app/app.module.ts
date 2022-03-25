@@ -14,11 +14,13 @@ import { environment } from '../environments/environment';
 import { appReducers } from './ngrx/reducer/app.reducer';
 import { HttpTokenInterceptor } from './common/interceptors/http-token.interceptor';
 import { RefreshTokenInterceptor } from './common/interceptors/refresh-token.interceptor';
+import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ForbiddenComponent
   ],
   imports: [
     BrowserModule,

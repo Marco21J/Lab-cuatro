@@ -7,7 +7,7 @@ export const getErrorMessage = (errorKey: string, formError: ValidationErrors): 
         case 'minlength':
             return `Este campo debe contener al menos ${formError.minlength.requiredLength} caracteres.`;
         case 'maxlength':
-            return `Este campo no puede tener más de ${formError.minlength.requiredLength} caracteres.`;
+            return `Este campo no puede tener más de ${formError.maxlength.requiredLength} caracteres.`;
         case 'email':
             return 'Este campo debe contener un formato de correo electrónico válido.';
         default:
