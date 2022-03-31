@@ -2,10 +2,81 @@
     <div class="col-md-12">
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group" role="group" aria-label="First group">
-                <a class="btn btn-success" routerLink="/dashboard/usuarios/new">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="onRegister()">
                   Agregar <i class="fas fa-plus ms-2"></i>
-              </a>
+              </button>
             </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table datatable [dtOptions]="dtOptions" class="row-border hover table w-100">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="marcas.length !== 0">
+            <tr *ngFor="let marca of marcas; let i = index;">
+                <td> {{ i + 1 }} </td>
+                <td>{{ marca.nombre }}</td>
+                <td>{{ marca.descripcion }}</td>
+                <td>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group me-2" role="group" aria-label="First group">
+                            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="onEdit(marca)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                        <div class="btn-group" role="group" aria-label="Second group">
+                            <button type="button" class="btn btn-danger" (click)="delete(marca.id)">
+                              <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="marcas.length === 0">
+            <tr>
+                <td colspan="3" class="no-data-available">No data!</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form novalidate autocomplete="off" [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">{{ isEditing ? 'Editar Marca' : 'Nueva Marca' }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" maxlength="30" class="form-control" placeholder="Nombre" [class.is-invalid]="isNombreValid" formControlName="nombre">
+                        <div class="invalid-feedback" *ngIf="isNombreValid">
+                            {{ getErrorMessage('nombre') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control" rows="3" maxlength="100" [class.is-invalid]="isDescripcionValid" formControlName="descripcion"></textarea>
+                        <div class="invalid-feedback" *ngIf="isDescripcionValid">
+                            {{ getErrorMessage('descripcion') }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-success" [disabled]="!form.valid || isLoading"> {{ isEditing ? 'Guardar' : 'Registrar'}} </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
