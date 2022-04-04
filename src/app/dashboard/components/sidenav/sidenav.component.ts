@@ -36,6 +36,11 @@ export class SidenavComponent implements OnDestroy {
       path: '/dashboard/unidades-medida',
       text: 'Unidades de Medida',
       faIcon: 'fas fa-ruler-combined me-2',
+    },
+    {
+      path: '/dashboard/ubicaciones',
+      text: 'Ubicaciones',
+      faIcon: 'fas fa-th me-2',
     }
   ];
 

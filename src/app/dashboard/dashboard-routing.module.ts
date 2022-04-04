@@ -42,6 +42,14 @@ const routes: Routes = [
         data: {
           roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
         }
+      },
+      {
+        path: 'ubicaciones',
+        loadChildren: () => import('../ubicaciones/ubicaciones.module').then(m => m.UbicacionesModule),
+        canActivate: [RolGuard],
+        data: {
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+        }
       }
     ]
   },
