@@ -34,6 +34,14 @@ const routes: Routes = [
         data: {
           roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
         }
+      },
+      {
+        path: 'unidades-medida',
+        loadChildren: () => import('../unidades-medida/unidades-medida.module').then(m => m.UnidadesMedidaModule),
+        canActivate: [RolGuard],
+        data: {
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+        }
       }
     ]
   },

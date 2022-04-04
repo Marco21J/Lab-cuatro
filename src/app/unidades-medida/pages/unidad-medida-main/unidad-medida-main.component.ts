@@ -1,32 +1,32 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DataTableDirective } from 'angular-datatables';
-import { SweetAlertService } from '../../../shared/services/sweet-alert.service';
-import { MarcaService } from '../../services/marca.service';
-import { IMarcaRead } from '../../models/interface';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UnidadMedidaService } from '../../services/unidad-medida.service';
+import { SweetAlertService } from '../../../shared/services/sweet-alert.service';
+import { IUnidadMedidaRead } from '../../models/interface';
+import { DataTableDirective } from 'angular-datatables';
 import { getErrorMessage } from 'src/app/common/security/validation-message/validation-message';
 
 @Component({
-  selector: 'app-marca-main',
-  templateUrl: './marca-main.component.html',
-  styleUrls: ['./marca-main.component.scss']
+  selector: 'app-unidad-medida-main',
+  templateUrl: './unidad-medida-main.component.html',
+  styleUrls: ['./unidad-medida-main.component.scss']
 })
-export class MarcaMainComponent implements OnInit, OnDestroy {
+export class UnidadMedidaMainComponent implements OnInit, OnDestroy {
 
-  public marcas: IMarcaRead[] = [];
-  public dtOptions!: DataTables.Settings;
   public form!: FormGroup;
+  public unidadesMedida: IUnidadMedidaRead[] = [];
+  public dtOptions!: DataTables.Settings;
   public isEditing = false;
   public isLoading = false;
-  private marcaId!: string;
   private subscription = new Subscription();
+  private unidadMedidaId!: string;
   @ViewChild(DataTableDirective, { static: false })
   private dtElement!: DataTableDirective;
 
   constructor(
+    private unidadMedidaService: UnidadMedidaService,
     private swas: SweetAlertService,
-    private marcaService: MarcaService,
     private fb: FormBuilder,
   ) {
     this.createForm();
@@ -44,8 +44,8 @@ export class MarcaMainComponent implements OnInit, OnDestroy {
       ajax: (dataTablesParameters: any, callback) => {
         const { length, start, search } = dataTablesParameters;
         const { value } = search;
-        that.subscription.add(that.marcaService.getAllPaginated(start, length, value).subscribe(data => {
-          this.marcas = data.data;
+        that.subscription.add(that.unidadMedidaService.getAllPaginated(start, length, value).subscribe(data => {
+          this.unidadesMedida = data.data;
           callback({
             recordsTotal: data.count,
             recordsFiltered: data.filteredCount,
@@ -75,12 +75,8 @@ export class MarcaMainComponent implements OnInit, OnDestroy {
       }
     };
   }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  public onSubmit(): void {
+  
+  onSubmit(): void {
     if (this.form.valid) {
       if (this.isEditing) {
         this.editOne();
@@ -92,11 +88,60 @@ export class MarcaMainComponent implements OnInit, OnDestroy {
     }
   }
 
+  onRegister(): void {
+    this.isEditing = false;
+    this.form.reset();
+  }
+
+  private createOne(): void {
+    this.isLoading = true;
+    this.swas.showLoading('Espere', 'Registrando...');
+    const { nombre, descripcion } = this.form.value;
+    this.subscription.add(this.unidadMedidaService.createOne({ nombre, descripcion }).subscribe(data => {
+      this.isLoading = false;
+      this.swas.hideLoading();
+      this.reloadAjaxDataTable();
+      this.form.reset();
+      this.swas.showAlertGeneric('Ok', 'Se registró correctamente la unidad de medida', 'success');
+    }, e => {
+      this.isLoading = false;
+      this.swas.hideLoading();
+      this.swas.showAlertGeneric('Error', 'No se pudo registrar la unidad de medida', 'error');
+    }));
+  }
+
+  onEdit(unidadMedida: IUnidadMedidaRead): void {
+    this.isEditing = true;
+    this.setValues(unidadMedida);
+  }
+
+  private editOne(): void {
+    this.isLoading = true;
+    this.swas.showLoading('Espere', 'Guardando...');
+    const { nombre, descripcion } = this.form.value;
+    this.subscription.add(this.unidadMedidaService.updateOne(this.unidadMedidaId, { nombre, descripcion }).subscribe(data => {
+      this.isLoading = false;
+      this.swas.hideLoading();
+      this.unidadesMedida.forEach(um => {
+        if (um.id === this.unidadMedidaId) {
+          um.nombre = nombre;
+          um.descripcion = descripcion;
+          return;
+        }
+      });
+      this.swas.showAlertGeneric('Ok', 'Se guardaron los cambios', 'success');
+    }, e => {
+      this.isLoading = false;
+      this.swas.hideLoading();
+      this.swas.showAlertGeneric('Error', 'No se pudo editar la unidad de medida', 'error');
+    }));
+  }
+
   public async delete(id: string): Promise<void> {
     const sure = await this.swas.showConfirmDialog('¿Está seguro?', 'Esta acción no se puede deshacer', 'question', 'Eliminar');
     if (sure.isConfirmed) {
       this.swas.showLoading('Espere', 'Eliminando...');
-      this.subscription.add(this.marcaService.deleteOne(id).subscribe(data => {
+      this.subscription.add(this.unidadMedidaService.deleteOne(id).subscribe(data => {
         this.swas.hideLoading();
         this.reloadAjaxDataTable();
         this.swas.showAlertGeneric('Ok', 'Se eliminó correctamente', 'success');
@@ -107,58 +152,13 @@ export class MarcaMainComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onRegister(): void {
-    this.isEditing = false;
-    this.form.reset();
-  }
 
-  public onEdit(marca: IMarcaRead): void {
-    this.isEditing = true;
-    this.setValues(marca);
-  }
-
-  private createOne(): void {
-    this.isLoading = true;
-    this.swas.showLoading('Espere', 'Registrando...');
-    const { nombre, descripcion } = this.form.value;
-    this.subscription.add(this.marcaService.createOne({ nombre, descripcion }).subscribe(data => {
-      this.isLoading = false;
-      this.swas.hideLoading();
-      this.reloadAjaxDataTable();
-      this.form.reset();
-      this.swas.showAlertGeneric('Ok', 'Se registró correctamente la marca', 'success');
-    }, e => {
-      this.isLoading = false;
-      this.swas.hideLoading();
-      this.swas.showAlertGeneric('Error', 'No se pudo registrar la marca', 'error');
-    }));
-  }
-
-  private editOne(): void {
-    this.isLoading = true;
-    this.swas.showLoading('Espere', 'Guardando...');
-    const { nombre, descripcion } = this.form.value;
-    this.subscription.add(this.marcaService.updateOne(this.marcaId, { nombre, descripcion }).subscribe(data => {
-      this.isLoading = false;
-      this.swas.hideLoading();
-      this.marcas.forEach(m => {
-        if (m.id === this.marcaId) {
-          m.nombre = nombre;
-          m.descripcion = descripcion;
-        }
-      });
-      this.swas.showAlertGeneric('Ok', 'Se guardaron los cambios', 'success');
-    }, e => {
-      this.isLoading = false;
-      this.swas.hideLoading();
-      this.swas.showAlertGeneric('Error', 'No se pudo editar la marca', 'error');
-    }));
-  }
+  //#region Form region
 
   public get isNombreValid(): boolean {
     const field = this.form.get('nombre');
     if (field) {
-      return field.invalid && (field.dirty || field.touched);
+      return field.invalid && (field.touched || field.dirty);
     }
     return false;
   }
@@ -166,7 +166,7 @@ export class MarcaMainComponent implements OnInit, OnDestroy {
   public get isDescripcionValid(): boolean {
     const field = this.form.get('descripcion');
     if (field) {
-      return field.invalid && (field.dirty || field.touched);
+      return field.invalid && (field.touched || field.dirty);
     }
     return false;
   }
@@ -183,12 +183,18 @@ export class MarcaMainComponent implements OnInit, OnDestroy {
   private createForm(): void {
     this.form = this.fb.group({
       nombre: ['', [
-        Validators.required
+        Validators.required,
       ]],
       descripcion: ['', [
-        Validators.maxLength(200),
+        Validators.required
       ]]
     });
+  }
+
+  //#endregion
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   private reloadAjaxDataTable(): void {
@@ -197,9 +203,10 @@ export class MarcaMainComponent implements OnInit, OnDestroy {
     });
   }
 
-  private setValues(marca: IMarcaRead): void {
-    this.form.get('nombre')?.setValue(marca.nombre);
-    this.form.get('descripcion')?.setValue(marca.descripcion ? marca.descripcion : '');
-    this.marcaId = marca.id;
+  private setValues(unidadMedida: IUnidadMedidaRead): void {
+    this.form.get('nombre')?.setValue(unidadMedida.nombre);
+    this.form.get('descripcion')?.setValue(unidadMedida.descripcion ? unidadMedida.descripcion : '');
+    this.unidadMedidaId = unidadMedida.id;
   }
+
 }
