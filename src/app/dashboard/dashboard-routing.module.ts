@@ -32,7 +32,7 @@ const routes: Routes = [
         loadChildren: () => import('../marcas/marcas.module').then(m => m.MarcasModule),
         canActivate: [RolGuard],
         data: {
-          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO, RolEnum.DOCENTE]
         }
       },
       {
@@ -40,7 +40,7 @@ const routes: Routes = [
         loadChildren: () => import('../unidades-medida/unidades-medida.module').then(m => m.UnidadesMedidaModule),
         canActivate: [RolGuard],
         data: {
-          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO, RolEnum.DOCENTE]
         }
       },
       {
@@ -48,7 +48,7 @@ const routes: Routes = [
         loadChildren: () => import('../ubicaciones/ubicaciones.module').then(m => m.UbicacionesModule),
         canActivate: [RolGuard],
         data: {
-          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO, RolEnum.DOCENTE]
         }
       },
       {
@@ -56,7 +56,7 @@ const routes: Routes = [
         loadChildren: () => import('../materiales/materiales.module').then(m => m.MaterialesModule),
         canActivate: [RolGuard],
         data: {
-          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO, RolEnum.DOCENTE]
         }
       },
       {
@@ -64,7 +64,7 @@ const routes: Routes = [
         loadChildren: () => import('../reactivos/reactivos.module').then(m => m.ReactivosModule),
         canActivate: [RolGuard],
         data: {
-          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO, RolEnum.DOCENTE]
         }
       },
       {
@@ -72,7 +72,7 @@ const routes: Routes = [
         loadChildren: () => import('../dashboard-pages/dashboard-pages.module').then(m => m.DashboardPagesModule),
         canActivate: [RolGuard],
         data: {
-          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO, RolEnum.DOCENTE]
         }
       },
     ]

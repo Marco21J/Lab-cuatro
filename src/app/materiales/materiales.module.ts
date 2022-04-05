@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialDetailComponent } from './pages/material-detail/material-detail.component';
 import { MaterialSkusComponent } from './components/material-skus/material-skus.component';
 import { MaterialCardComponent } from './components/material-card/material-card.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { MaterialCardComponent } from './components/material-card/material-card.
     CommonModule,
     MaterialesRoutingModule,
     DataTablesModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ],
   exports: [MaterialCardComponent]
 })
