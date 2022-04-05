@@ -15,6 +15,10 @@ export class ReactivoService {
     return this.http.get<IPaginateResponse<IReactivoRead>>(`/reactivos/filter/?skip=${skip}&take=${take}&query=${query}`);
   }
 
+  public getAllByStockAndCantidad(stock = 30, cantidad = 30): Observable<IReactivoRead[]> {
+    return this.http.get<IReactivoRead[]>(`/reactivos/dashboard/${stock}/${cantidad}`);
+  }
+
   public getOneById(id: string): Observable<IReactivoRead> {
     return this.http.get<IReactivoRead>(`/reactivos/${id}`);
   }

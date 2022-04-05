@@ -61,7 +61,7 @@ export class LoginComponent implements OnDestroy {
       const { email, contrasena } = this.form.value;
       this.subscription.add(this.authService.login({ email, contrasena }).subscribe(data => {
         this.isLoading = false;
-        this.router.navigateByUrl('/dashboard');
+        this.router.navigateByUrl('/dashboard/main');
       }, (e: HttpErrorResponse) => {
         this.isLoading = false;
         if (e.status === 401) {

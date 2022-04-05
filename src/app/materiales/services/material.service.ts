@@ -15,6 +15,10 @@ export class MaterialService {
     return this.http.get<IPaginateResponse<IMaterialRead>>(`/materiales/filter/?skip=${skip}&take=${take}&query=${query}`);
   }
 
+  public getAllByCantidad(cantidad = 30): Observable<IMaterialRead[]> {
+    return this.http.get<IMaterialRead[]>(`/materiales/dashboard/${cantidad}`);
+  }
+
   public getOneById(id: string): Observable<IMaterialRead> {
     return this.http.get<IMaterialRead>(`/materiales/${id}`);
   }

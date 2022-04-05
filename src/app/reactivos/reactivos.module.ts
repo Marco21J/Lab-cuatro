@@ -9,6 +9,7 @@ import { ReactivoAddComponent } from './pages/reactivo-add/reactivo-add.componen
 import { ReactivoEditComponent } from './pages/reactivo-edit/reactivo-edit.component';
 import { ReactivoDetailComponent } from './pages/reactivo-detail/reactivo-detail.component';
 import { ReactivoSkusComponent } from './components/reactivo-skus/reactivo-skus.component';
+import { ReactivoCardComponent } from './components/reactivo-card/reactivo-card.component';
 
 
 @NgModule({
@@ -17,13 +18,17 @@ import { ReactivoSkusComponent } from './components/reactivo-skus/reactivo-skus.
     ReactivoAddComponent,
     ReactivoEditComponent,
     ReactivoDetailComponent,
-    ReactivoSkusComponent
+    ReactivoSkusComponent,
+    ReactivoCardComponent
   ],
   imports: [
     CommonModule,
     ReactivosRoutingModule,
     ReactiveFormsModule,
     DataTablesModule
-  ]
+  ],
+  exports: [
+    ReactivoCardComponent
+  ],
 })
 export class ReactivosModule { }

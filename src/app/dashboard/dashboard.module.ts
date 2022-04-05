@@ -11,11 +11,11 @@ import { MainLayoutComponent } from './pages/main-layout/main-layout.component';
   declarations: [
     HeaderComponent,
     SidenavComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
   ],
   imports: [
     CommonModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
   ]
 })
 export class DashboardModule { }

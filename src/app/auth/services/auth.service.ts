@@ -25,6 +25,7 @@ export class AuthService {
     return this.http.post<ILoginResponse>(`/auth/login`, body)
       .pipe(tap(data => {
         this.saveSession(data);
+        this.sessionObject = data;
         this.store.dispatch(authActions.setUser({ usuario: data }));
       }));
   }

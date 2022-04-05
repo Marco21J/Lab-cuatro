@@ -18,7 +18,7 @@ export class SidenavComponent implements OnDestroy {
 
   public routes: ISidenavRoute[] = [
     {
-      path: '/dashboard/olv',
+      path: '/dashboard/main',
       text: 'Dashboard',
       faIcon: 'fas fa-tachometer-alt me-2'
     },

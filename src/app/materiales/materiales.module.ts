@@ -9,6 +9,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialDetailComponent } from './pages/material-detail/material-detail.component';
 import { MaterialSkusComponent } from './components/material-skus/material-skus.component';
+import { MaterialCardComponent } from './components/material-card/material-card.component';
 
 
 @NgModule({
@@ -17,13 +18,15 @@ import { MaterialSkusComponent } from './components/material-skus/material-skus.
     MaterialAddComponent,
     MaterialEditComponent,
     MaterialDetailComponent,
-    MaterialSkusComponent
+    MaterialSkusComponent,
+    MaterialCardComponent
   ],
   imports: [
     CommonModule,
     MaterialesRoutingModule,
     DataTablesModule,
     ReactiveFormsModule
-  ]
+  ],
+  exports: [MaterialCardComponent]
 })
 export class MaterialesModule { }

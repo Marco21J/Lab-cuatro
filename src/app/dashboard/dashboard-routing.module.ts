@@ -66,7 +66,15 @@ const routes: Routes = [
         data: {
           roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
         }
-      }
+      },
+      {
+        path: 'main',
+        loadChildren: () => import('../dashboard-pages/dashboard-pages.module').then(m => m.DashboardPagesModule),
+        canActivate: [RolGuard],
+        data: {
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+        }
+      },
     ]
   },
 ];
