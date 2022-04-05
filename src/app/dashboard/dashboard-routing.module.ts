@@ -58,6 +58,14 @@ const routes: Routes = [
         data: {
           roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
         }
+      },
+      {
+        path: 'reactivos',
+        loadChildren: () => import('../reactivos/reactivos.module').then(m => m.ReactivosModule),
+        canActivate: [RolGuard],
+        data: {
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+        }
       }
     ]
   },

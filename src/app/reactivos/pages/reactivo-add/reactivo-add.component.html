@@ -1,0 +1,175 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/dashboard/reactivos">Reactivos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Nuevo</li>
+    </ol>
+</nav>
+<div class="card shadow-sm border-light rounded">
+    <div class="card-header ">
+        Nuevo Reactivo
+    </div>
+    <div class="card-body">
+        <form novalidate autocomplete="off" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-control" placeholder="Nombre" maxlength="50" [class.is-invalid]="isNombreValid" formControlName="nombre">
+                    <div class="invalid-feedback" *ngIf="isNombreValid">
+                        {{ getErrorMessage('nombre') }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Stock</label>
+                    <input type="text" inputmode="numeric" class="form-control" placeholder="Stock" maxlength="30" [class.is-invalid]="isStockValid" formControlName="stock">
+                    <div class="invalid-feedback" *ngIf="isStockValid">
+                        {{ getErrorMessage('stock') }}
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de Ingreso</label>
+                    <input type="date" class="form-control" placeholder="Fecha de Ingreso" [class.is-invalid]="isFechaIngresoValid" formControlName="fechaIngreso">
+                    <div class="invalid-feedback" *ngIf="isFechaIngresoValid">
+                        {{ getErrorMessage('fechaIngreso') }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Cantidad</label>
+                    <input type="text" inputmode="numeric" class="form-control" placeholder="Cantidad" [class.is-invalid]="isCantidadValid" formControlName="cantidad">
+                    <div class="invalid-feedback" *ngIf="isCantidadValid">
+                        {{ getErrorMessage('cantidad') }}
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label class="form-label">Estado Físico</label>
+                    <select class="form-select" [class.is-invalid]="isEstadoFisicoValid" formControlName="estadoFisico">
+                        <option value="">Selecciona una opción</option>
+                        <option *ngFor="let estadoFisico of estadosFisicos" [value]="estadoFisico.valor"> {{ estadoFisico.text }} </option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="isEstadoFisicoValid">
+                        {{ getErrorMessage('estadoFisico') }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Clasificación</label>
+                    <select class="form-select" [class.is-invalid]="isClasificacionValid" formControlName="clasificacion">
+                        <option value="">Selecciona una opción</option>
+                        <option *ngFor="let clasificacion of clasificaciones" [value]="clasificacion.valor"> {{ clasificacion.text }} </option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="isClasificacionValid">
+                        {{ getErrorMessage('clasificacion') }}
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label class="form-label">Unidad de Medida</label>
+                    <select class="form-select" [class.is-invalid]="isUnidadMedidaValid" formControlName="unidadMedida">
+                        <option value="">Selecciona una opción</option>
+                        <option *ngFor="let unidadMedida of unidadesMedida" [value]="unidadMedida.id"> {{ unidadMedida.nombre }} </option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="isUnidadMedidaValid">
+                        {{ getErrorMessage('unidadMedida') }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Marca</label>
+                    <select class="form-select" [class.is-invalid]="isMarcaValid" formControlName="marca">
+                        <option value="">Selecciona una opción</option>
+                        <option *ngFor="let marca of marcas" [value]="marca.id"> {{ marca.nombre }} </option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="isMarcaValid">
+                        {{ getErrorMessage('clasificacion') }}
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label class="form-label">Tipo de Envase</label>
+                    <select class="form-select" [class.is-invalid]="isTipoEnvaseValid" formControlName="tipoEnvase">
+                        <option value="">Selecciona una opción</option>
+                        <option *ngFor="let tipoEnvase of tiposEnvase" [value]="tipoEnvase.id"> {{ tipoEnvase.nombre }} </option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="isTipoEnvaseValid">
+                        {{ getErrorMessage('tipoEnvase') }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Ubicación</label>
+                    <select class="form-select" [class.is-invalid]="isUbicacionValid" formControlName="ubicacion">
+                        <option value="">Selecciona una opción</option>
+                        <option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion.id"> A{{ ubicacion.anaquel }}N{{ ubicacion.nivel }} </option>
+                    </select>
+                    <div class="invalid-feedback" *ngIf="isUbicacionValid">
+                        {{ getErrorMessage('clasificacion') }}
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="flexCheckDefault" formControlName="hojaSeguridad">
+                        <label class="form-check-label" for="flexCheckDefault">
+                          Hoja de seguridad
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <label class="form-label">Descripción</label>
+                    <textarea class="form-control" rows="3" style="resize: none;" maxlength="100" [class.is-invalid]="isDescripcionValid" formControlName="descripcion"></textarea>
+                    <div class="invalid-feedback" *ngIf="isDescripcionValid">
+                        {{ getErrorMessage('descripcion') }}
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row mt-3">
+                <h5>Skus</h5>
+                <div class="col-md-12">
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group me-2" role="group" aria-label="First group">
+                            <button type="button" class="btn btn-success" (click)="addSkuItem()">
+                                <i class="fas fa-plus-square"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" formArrayName="skus">
+                <div class="row mt-3" *ngFor="let sku of skus.controls; let i = index;">
+                    <div class="col-md-12" [formGroupName]="i">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" placeholder="Valor" maxlength="30" [class.is-invalid]="isSkuValorValid(i)" formControlName="valor">
+                                <div class="invalid-feedback" *ngIf="isSkuValorValid(i)">
+                                    {{ getErrorMessageFromArray('valor', i) }}
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" placeholder="Descripción" maxlength="50" [class.is-invalid]="isSkuDescripcionValid(i)" formControlName="descripcion">
+                                <div class="invalid-feedback" *ngIf="isSkuDescripcionValid(i)">
+                                    {{ getErrorMessageFromArray('descripcion', i) }}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-danger" *ngIf="i > 0" (click)="deleteSkuItem(i)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-success float-end" [disabled]="form.invalid || isLoading">Guardar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

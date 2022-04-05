@@ -1,0 +1,38 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink="/dashboard/reactivos">Reactivos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Detalle</li>
+    </ol>
+</nav>
+<div class="card shadow-sm border-light rounded" *ngIf="reactivo">
+    <div class="card-header ">
+        Reactivo: <u>{{ reactivo.nombre }}</u>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <ul class="list-unstyled">
+                    <li class=""><strong>Descripción:</strong> {{ reactivo.desripcion }}</li>
+                    <li class="mt-2"><strong>Stock:</strong> {{ reactivo.stock }}</li>
+                    <li class="mt-2"><strong>Cantidad:</strong> {{ reactivo.cantidad }}</li>
+                    <li class="mt-2"><strong>Estado Físico:</strong> {{ reactivo.estadoFisico }}</li>
+                    <li class="mt-2"><strong>Clasificación:</strong> {{ reactivo.clasificacion }}</li>
+                    <li class="mt-2"><strong>Fecha de Ingreso:</strong> {{ reactivo.fechaIngreso | date }}</li>
+                    <li class="mt-2">
+                        <strong class="me-2">Hoja de Seguridad:</strong>
+                        <span class="badge" [ngClass]="{'bg-success': reactivo.hojaSeguridad, 'bg-danger': !reactivo.hojaSeguridad}">
+                            <i class="fas" [ngClass]="{'fa-check': reactivo.hojaSeguridad, 'fa-times': !reactivo.hojaSeguridad}"></i>
+                        </span>
+                    </li>
+                    <li class="mt-2"><strong>Unidad de Medida:</strong> {{ reactivo.unidadMedida.nombre }}</li>
+                    <li class="mt-2"><strong>Marca:</strong> {{ reactivo.marca.nombre }}</li>
+                    <li class="mt-2"><strong>Tipo de envase:</strong> {{ reactivo.tipoEnvase.nombre }}</li>
+                    <li class="mt-2"><strong>Ubicación:</strong> A{{ reactivo.ubicacion.anaquel }}N{{ reactivo.ubicacion.nivel }}</li>
+                </ul>
+            </div>
+            <div class="col-md-8" *ngIf="reactivo">
+                <app-reactivo-skus [skus]="reactivo.skus" [idReactivo]="id"></app-reactivo-skus>
+            </div>
+        </div>
+    </div>
+</div>

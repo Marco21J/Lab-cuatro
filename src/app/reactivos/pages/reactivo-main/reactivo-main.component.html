@@ -1,0 +1,71 @@
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group" role="group" aria-label="First group">
+                <a class="btn btn-success" routerLink="/dashboard/reactivos/new">
+                    Agregar <i class="fas fa-plus ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table datatable [dtOptions]="dtOptions" class="row-border hover table w-100">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Stock</th>
+                <th>Cantidad</th>
+                <th>Estado Físico</th>
+                <th>Clasificación</th>
+                <th>Fecha Ingreso</th>
+                <th>Hoja de Seguridad</th>
+                <th>Unidad de Medida</th>
+                <th>Marca</th>
+                <th>Tipo de Envase</th>
+                <th>Ubicación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="reactivos.length !== 0">
+            <tr *ngFor="let reactivo of reactivos; let i = index;">
+                <td>
+                    <a [routerLink]="['/dashboard/reactivos/detail/', reactivo.id]">{{ reactivo.nombre }}</a>
+                </td>
+                <td>{{ reactivo.stock }}</td>
+                <td>{{ reactivo.cantidad }}</td>
+                <td>{{ reactivo.estadoFisico }}</td>
+                <td>{{ reactivo.clasificacion }}</td>
+                <td>{{ reactivo.fechaIngreso | date }}</td>
+                <td class="text-center">
+                    <span class="badge" [ngClass]="{'bg-success': reactivo.hojaSeguridad, 'bg-danger': !reactivo.hojaSeguridad}">
+                        <i class="fas" [ngClass]="{'fa-check': reactivo.hojaSeguridad, 'fa-times': !reactivo.hojaSeguridad}"></i>
+                    </span>
+                </td>
+                <td>{{ reactivo.unidadMedida.nombre }}</td>
+                <td>{{ reactivo.marca.nombre }}</td>
+                <td>{{ reactivo.tipoEnvase.nombre }}</td>
+                <td> A{{ reactivo.ubicacion.anaquel }}N{{ reactivo.ubicacion.nivel }}</td>
+                <td>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group me-2" role="group" aria-label="First group">
+                            <a class="btn btn-secondary" [routerLink]="['/dashboard/reactivos/edit/', reactivo.id]">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                        <div class="btn-group" role="group" aria-label="Second group">
+                            <button type="button" class="btn btn-danger" (click)="delete(reactivo.id)">
+                              <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="reactivos.length === 0">
+            <tr>
+                <td colspan="3" class="no-data-available">No data!</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

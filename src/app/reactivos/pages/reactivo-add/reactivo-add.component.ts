@@ -1,54 +1,49 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MaterialService } from '../../services/material.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SweetAlertService } from '../../../shared/services/sweet-alert.service';
-import { Subscription } from 'rxjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IUnidadMedidaRead } from 'src/app/unidades-medida/models/interface';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { IMarcaRead } from 'src/app/marcas/models/interface';
-import { ITipoMaterialRead } from 'src/app/tipo-material/models/interface';
+import { ITipoEnvaseRead } from 'src/app/tipo-envase/models/interface';
 import { IUbicacionRead } from 'src/app/ubicaciones/models/interface';
-import { ClasificacionEnum } from 'src/app/common/enums';
+import { IUnidadMedidaRead } from 'src/app/unidades-medida/models/interface';
+import { Subscription } from 'rxjs';
+import { ReactivoService } from '../../services/reactivo.service';
+import { SweetAlertService } from '../../../shared/services/sweet-alert.service';
 import { UnidadMedidaService } from 'src/app/unidades-medida/services/unidad-medida.service';
 import { MarcaService } from 'src/app/marcas/services/marca.service';
 import { UbicacionService } from 'src/app/ubicaciones/services/ubicacion.service';
-import { TipoMaterialService } from 'src/app/tipo-material/services/tipo-material.service';
-import { IMaterialEdit, IMaterialRead } from '../../models/interface';
+import { TipoEnvaseService } from 'src/app/tipo-envase/services/tipo-envase.service';
+import { ClasificacionEnum, EstadoFisicoEnum } from 'src/app/common/enums';
 import { getErrorMessage } from 'src/app/common/security/validation-message/validation-message';
+import { IReactivoCreate } from '../../models/interface';
+import { ISkuSmCreate } from 'src/app/skus/models/interface';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'app-material-edit',
-  templateUrl: './material-edit.component.html',
-  styleUrls: ['./material-edit.component.scss']
+  selector: 'app-reactivo-add',
+  templateUrl: './reactivo-add.component.html',
+  styleUrls: ['./reactivo-add.component.scss']
 })
-export class MaterialEditComponent implements OnInit, OnDestroy {
+export class ReactivoAddComponent implements OnInit, OnDestroy {
 
   public form!: FormGroup;
   public unidadesMedida: IUnidadMedidaRead[] = [];
   public marcas: IMarcaRead[] = [];
   public ubicaciones: IUbicacionRead[] = [];
-  public tiposMaterial: ITipoMaterialRead[] = [];
+  public tiposEnvase: ITipoEnvaseRead[] = [];
   public clasificaciones: { valor: string, text: string }[] = [];
-  public material!: IMaterialRead;
+  public estadosFisicos: { valor: string, text: string }[] = [];
   public isLoading = false;
   private subscription = new Subscription();
-  private id: string;
 
   constructor(
-    private materialService: MaterialService,
-    private route: ActivatedRoute,
-    private swas: SweetAlertService,
     private fb: FormBuilder,
+    private reactivoService: ReactivoService,
+    private swas: SweetAlertService,
     private unidadMedidaService: UnidadMedidaService,
     private marcaService: MarcaService,
     private ubicacionService: UbicacionService,
-    private tipoMaterialService: TipoMaterialService,
-    private router: Router,
+    private tipoEnvaseService: TipoEnvaseService,
   ) {
     this.createForm();
-    const id = this.route.snapshot.paramMap.get('id');
-    this.id = id ? id : '';
     this.clasificaciones = [
       {
         valor: ClasificacionEnum.A,
@@ -63,24 +58,17 @@ export class MaterialEditComponent implements OnInit, OnDestroy {
         text: 'C' 
       },
     ];
+    this.estadosFisicos = [
+      { valor: EstadoFisicoEnum.LIQUIDO, text: 'Líquido' },
+      { valor: EstadoFisicoEnum.SOLIDO, text: 'Sólido' }
+    ];
   }
 
   ngOnInit(): void {
     this.getUnidadesMedida();
     this.getMarcas();
     this.getUbicaciones();
-    this.getTiposMaterial();
-    this.getMaterialById();
-  }
-
-  private getMaterialById(): void {
-    this.subscription.add(this.materialService.getOneById(this.id).subscribe(data => {
-      this.material = data;
-      this.ubicaciones.push(data.ubicacion);
-      this.setValues(data);
-    }, (e) => {
-      this.router.navigateByUrl('/dashboard/materiales');
-    }));
+    this.getTiposEnvase();
   }
 
   onSubmit(): void {
@@ -88,10 +76,11 @@ export class MaterialEditComponent implements OnInit, OnDestroy {
       this.isLoading = true;
       this.swas.showLoading('Espere', 'Registrando....');
       const body = this.getRequestObject();
-      this.subscription.add(this.materialService.updateOne(this.id, body).subscribe(data => {
+      this.subscription.add(this.reactivoService.createOne(body).subscribe(data => {
         this.isLoading = false;
         this.swas.hideLoading();
-        this.swas.showAlertGeneric('Ok', 'Se guardaron los cambios', 'success');
+        this.swas.showAlertGeneric('Ok', 'Se registró correctamente el reactivo', 'success');
+        this.form.reset();
       }, (e: HttpErrorResponse) => {
         this.isLoading = false;
         this.swas.hideLoading();
@@ -100,7 +89,7 @@ export class MaterialEditComponent implements OnInit, OnDestroy {
           return;
         }
         if (e && e.status === 500) {
-          this.swas.showAlertGeneric('Error', 'Algo salió mal, no se pudo guardar', 'error');
+          this.swas.showAlertGeneric('Error', 'Algo salió mal, no se pudo registrar', 'error');
           return;
         }
       }));
@@ -109,7 +98,7 @@ export class MaterialEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  //#region Form region
+  //#region Form Region
 
   public get isNombreValid(): boolean {
     const field = this.form.get('nombre');
@@ -127,8 +116,8 @@ export class MaterialEditComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  public get isCapacidadTamanioValid(): boolean {
-    const field = this.form.get('capacidadTamanio');
+  public get isStockValid(): boolean {
+    const field = this.form.get('stock');
     if (field) {
       return field.invalid && (field.touched || field.dirty);
     }
@@ -137,6 +126,14 @@ export class MaterialEditComponent implements OnInit, OnDestroy {
 
   public get isCantidadValid(): boolean {
     const field = this.form.get('cantidad');
+    if (field) {
+      return field.invalid && (field.touched || field.dirty);
+    }
+    return false;
+  }
+
+  public get isEstadoFisicoValid(): boolean {
+    const field = this.form.get('estadoFisico');
     if (field) {
       return field.invalid && (field.touched || field.dirty);
     }
@@ -152,6 +149,14 @@ export class MaterialEditComponent implements OnInit, OnDestroy {
   }
 
   public get isFechaIngresoValid(): boolean {
+    const field = this.form.get('fechaIngreso');
+    if (field) {
+      return field.invalid && (field.touched || field.dirty);
+    }
+    return false;
+  }
+
+  public get isHojaSeguridadValid(): boolean {
     const field = this.form.get('fechaIngreso');
     if (field) {
       return field.invalid && (field.touched || field.dirty);
@@ -175,8 +180,8 @@ export class MaterialEditComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  public get isTipoMaterialValid(): boolean {
-    const field = this.form.get('tipoMaterial');
+  public get isTipoEnvaseValid(): boolean {
+    const field = this.form.get('tipoEnvase');
     if (field) {
       return field.invalid && (field.touched || field.dirty);
     }
@@ -191,11 +196,43 @@ export class MaterialEditComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  public get skus(): FormArray {
+    return this.form.get('skus') as FormArray;
+  }
+
+  public isSkuValorValid(i: number): boolean {
+    const groupdAtIndex = this.skus.at(i) as FormGroup;
+    const urlField = groupdAtIndex.get('valor');
+    if (urlField) {
+      return urlField.invalid && (urlField.touched || urlField.dirty);
+    }
+    return false;
+  }
+
+  public isSkuDescripcionValid(i: number): boolean {
+    const groupdAtIndex = this.skus.at(i) as FormGroup;
+    const urlField = groupdAtIndex.get('descripcion');
+    if (urlField) {
+      return urlField.invalid && (urlField.touched || urlField.dirty);
+    }
+    return false;
+  }
+
   public getErrorMessage(controlName: string): string {
     const control = this.form.get(controlName);
     if (control && control.errors) {
       const error = Object.keys(control.errors);
       return getErrorMessage(error[0], control.errors);
+    }
+    return '';
+  }
+
+  public getErrorMessageFromArray(formControlName: string, i: number): string {
+    const formGroup = this.skus.at(i);
+    const formControl = formGroup.get(formControlName);
+    if (formControl && formControl.errors) {
+      const error = Object.keys(formControl.errors);
+      return getErrorMessage(error[0], formControl.errors);
     }
     return '';
   }
@@ -208,10 +245,13 @@ export class MaterialEditComponent implements OnInit, OnDestroy {
       descripcion: ['', [
         Validators.required
       ]],
-      capacidadTamanio: ['', [
+      stock: ['', [
         Validators.required
       ]],
       cantidad: ['', [
+        Validators.required
+      ]],
+      estadoFisico: ['', [
         Validators.required
       ]],
       clasificacion: ['', [
@@ -220,35 +260,91 @@ export class MaterialEditComponent implements OnInit, OnDestroy {
       fechaIngreso: ['', [
         Validators.required
       ]],
+      hojaSeguridad: [false, [
+        Validators.required
+      ]],
       unidadMedida: ['', [
         Validators.required
       ]],
       marca: ['', [
         Validators.required
       ]],
-      tipoMaterial: ['', [
+      tipoEnvase: ['', [
         Validators.required
       ]],
       ubicacion: ['', [
         Validators.required
       ]],
+      skus: this.fb.array([]),
     }); 
+    const skuItem = this.fb.group({
+      valor: ['', [
+        Validators.required
+      ]],
+      descripcion: ['', [
+        Validators.required
+      ]]
+    });
+    this.skus.push(skuItem);
   }
 
-  private setValues(material: IMaterialRead): void {
-    this.form.get('nombre')?.setValue(material.nombre);
-    this.form.get('descripcion')?.setValue(material.desripcion);
-    this.form.get('capacidadTamanio')?.setValue(material.capacidadTamanio);
-    this.form.get('cantidad')?.setValue(material.cantidad);
-    this.form.get('clasificacion')?.setValue(material.clasificacion);
-    this.form.get('fechaIngreso')?.setValue(material.fechaIngreso);
-    this.form.get('unidadMedida')?.setValue(material.unidadMedida.id);
-    this.form.get('marca')?.setValue(material.marca.id);
-    this.form.get('tipoMaterial')?.setValue(material.tipoMaterial.id);
-    this.form.get('ubicacion')?.setValue(material.ubicacion.id);
+  addSkuItem(): void {
+    const skuItem = this.fb.group({
+      valor: ['', [
+        Validators.required
+      ]],
+      descripcion: ['', [
+        Validators.required
+      ]]
+    });
+    this.skus.push(skuItem);
+  }
+
+  deleteSkuItem(index: number): void {
+    this.skus.removeAt(index);
   }
 
   //#endregion
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  private getRequestObject(): IReactivoCreate {
+    const skus = this.skus.controls.map(group => {
+      const formGroup = group as FormGroup;
+      const skuItem: ISkuSmCreate = {
+        valor: formGroup.value.valor,
+        desripcion: formGroup.value.descripcion
+      };
+      return skuItem;
+    });
+    const mat: IReactivoCreate = {
+      nombre: this.form.value.nombre,
+      desripcion: this.form.value.descripcion,
+      stock: parseInt(this.form.value.stock),
+      cantidad: parseInt(this.form.value.cantidad),
+      estadoFisico: this.form.value.estadoFisico,
+      clasificacion: this.form.value.clasificacion,
+      fechaIngreso: this.form.value.fechaIngreso,
+      hojaSeguridad: this.form.value.hojaSeguridad,
+      status: 1,
+      unidadMedida: {
+        id: this.form.value.unidadMedida,
+      },
+      marca: {
+        id: this.form.value.marca,
+      },
+      tipoEnvase: {
+        id: parseInt(this.form.value.tipoEnvase)
+      },
+      ubicacion: {
+        id: this.form.value.ubicacion,
+      },
+      skus
+    }
+    return mat;
+  }
 
   //#region Get Foreign Keys
 
@@ -270,41 +366,12 @@ export class MaterialEditComponent implements OnInit, OnDestroy {
     }));
   }
 
-  private getTiposMaterial(): void {
-    this.subscription.add(this.tipoMaterialService.getAll().subscribe(data => {
-      this.tiposMaterial = data;
+  private getTiposEnvase(): void {
+    this.subscription.add(this.tipoEnvaseService.getAll().subscribe(data => {
+      this.tiposEnvase = data;
     }));
   }
 
   //#endregion
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  private getRequestObject(): IMaterialEdit {
-    const mat: IMaterialEdit = {
-      nombre: this.form.value.nombre,
-      desripcion: this.form.value.descripcion,
-      capacidadTamanio: this.form.value.capacidadTamanio,
-      cantidad: parseInt(this.form.value.cantidad),
-      clasificacion: this.form.value.clasificacion,
-      fechaIngreso: this.form.value.fechaIngreso,
-      status: 1,
-      unidadMedida: {
-        id: this.form.value.unidadMedida,
-      },
-      marca: {
-        id: this.form.value.marca,
-      },
-      tipoMaterial: {
-        id: parseInt(this.form.value.tipoMaterial)
-      },
-      ubicacion: {
-        id: this.form.value.ubicacion,
-      },
-    }
-    return mat;
-  }
 
 }
