@@ -1,0 +1,81 @@
+<div class="row">
+    <h5 class="text-center">Skus</h5>
+    <div class="col-md-12">
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group" role="group" aria-label="First group">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="onRegister()">
+                    Agregar <i class="fas fa-plus ms-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Valor</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let sku of skus; let i = index;">
+                        <th></th>
+                        <td>{{ sku.valor }}</td>
+                        <td>{{ sku.desripcion }}</td>
+                        <td>
+                            <div class="btn-toolbar" role="toolbar">
+                                <div class="btn-group me-2" role="group" aria-label="First group">
+                                    <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="onEdit(sku, i)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                </div>
+                                <div class="btn-group" role="group" aria-label="Second group" *ngIf="i > 0">
+                                    <button type="button" class="btn btn-danger" (click)="delete(sku.id)">
+                                  <i class="fas fa-trash"></i>
+                              </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form novalidate autocomplete="off" [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">{{ isEditing ? 'Editar Sku' : 'Nuevo Sku' }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Valor</label>
+                        <input type="text" maxlength="30" class="form-control" placeholder="Valor" [class.is-invalid]="isValorValid" formControlName="valor">
+                        <div class="invalid-feedback" *ngIf="isValorValid">
+                            {{ getErrorMessage('valor') }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control" rows="3" maxlength="100" [class.is-invalid]="isDescripcionValid" formControlName="descripcion"></textarea>
+                        <div class="invalid-feedback" *ngIf="isDescripcionValid">
+                            {{ getErrorMessage('descripcion') }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-success" [disabled]="!form.valid || isLoading"> {{ isEditing ? 'Guardar' : 'Registrar'}} </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

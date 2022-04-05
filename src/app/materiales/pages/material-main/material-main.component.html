@@ -1,0 +1,63 @@
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group" role="group" aria-label="First group">
+                <a class="btn btn-success" routerLink="/dashboard/materiales/new">
+                    Agregar <i class="fas fa-plus ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table datatable [dtOptions]="dtOptions" class="row-border hover table w-100">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Capacidad o tamaño</th>
+                <th>Cantidad</th>
+                <th>Clasificación</th>
+                <th>Fecha Ingreso</th>
+                <th>Unidad de Medida</th>
+                <th>Marca</th>
+                <th>Tipo de Material</th>
+                <th>Ubicación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="materiales.length !== 0">
+            <tr *ngFor="let material of materiales; let i = index;">
+                <td>
+                    <a [routerLink]="['/dashboard/materiales/detail/', material.id]">{{ material.nombre }}</a>
+                </td>
+                <td>{{ material.capacidadTamanio }}</td>
+                <td>{{ material.cantidad }}</td>
+                <td>{{ material.clasificacion }}</td>
+                <td>{{ material.fechaIngreso | date }}</td>
+                <td>{{ material.unidadMedida.nombre }}</td>
+                <td>{{ material.marca.nombre }}</td>
+                <td>{{ material.tipoMaterial.nombre }}</td>
+                <td> A{{ material.ubicacion.anaquel }}N{{ material.ubicacion.nivel }}</td>
+                <td>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group me-2" role="group" aria-label="First group">
+                            <a class="btn btn-secondary" [routerLink]="['/dashboard/materiales/edit/', material.id]">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                        <div class="btn-group" role="group" aria-label="Second group">
+                            <button type="button" class="btn btn-danger" (click)="delete(material.id)">
+                              <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="materiales.length === 0">
+            <tr>
+                <td colspan="3" class="no-data-available">No data!</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

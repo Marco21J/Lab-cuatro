@@ -41,6 +41,11 @@ export class SidenavComponent implements OnDestroy {
       path: '/dashboard/ubicaciones',
       text: 'Ubicaciones',
       faIcon: 'fas fa-th me-2',
+    },
+    {
+      path: '/dashboard/materiales',
+      text: 'Materiales',
+      faIcon: 'fas fa-prescription-bottle me-2',
     }
   ];
 

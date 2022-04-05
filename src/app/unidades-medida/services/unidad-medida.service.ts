@@ -15,6 +15,10 @@ export class UnidadMedidaService {
     return this.http.get<IPaginateResponse<IUnidadMedidaRead>>(`/unidad-medida/filter/?skip=${skip}&take=${take}&query=${query}`);
   }
 
+  public getAll(): Observable<IUnidadMedidaRead[]> {
+    return this.http.get<IUnidadMedidaRead[]>(`/unidad-medida`);
+  }
+
   public createOne(body: IUnidadMedidaCreate): Observable<IUnidadMedidaRead> {
     return this.http.post<IUnidadMedidaRead>('/unidad-medida', body);
   }

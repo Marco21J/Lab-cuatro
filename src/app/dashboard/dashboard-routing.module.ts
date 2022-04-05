@@ -50,6 +50,14 @@ const routes: Routes = [
         data: {
           roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
         }
+      },
+      {
+        path: 'materiales',
+        loadChildren: () => import('../materiales/materiales.module').then(m => m.MaterialesModule),
+        canActivate: [RolGuard],
+        data: {
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+        }
       }
     ]
   },

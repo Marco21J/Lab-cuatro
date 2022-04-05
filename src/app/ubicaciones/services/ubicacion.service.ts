@@ -15,6 +15,18 @@ export class UbicacionService {
     return this.http.get<IPaginateResponse<IUbicacionRead>>(`/ubicaciones/filter/?skip=${skip}&take=${take}&query=${query}`);
   }
 
+  public getAll(): Observable<IUbicacionRead[]> {
+    return this.http.get<IUbicacionRead[]>(`/ubicaciones`);
+  }
+
+  public getAllByMaterialId(id: string): Observable<IUbicacionRead[]> {
+    return this.http.get<IUbicacionRead[]>(`/ubicaciones/material/${id}`);
+  }
+
+  public getAllByReactivoId(id: string): Observable<IUbicacionRead[]> {
+    return this.http.get<IUbicacionRead[]>(`/ubicaciones/reactivo/${id}`);
+  }
+
   public createOne(body: IUbicacionCreate): Observable<IUbicacionRead> {
     return this.http.post<IUbicacionRead>('/ubicaciones', body);
   }
