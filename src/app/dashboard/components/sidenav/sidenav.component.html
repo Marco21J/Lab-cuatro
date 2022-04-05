@@ -1,12 +1,61 @@
 <!-- <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"> -->
 <div class="position-sticky pt-3">
-    <ul class="nav nav-pills flex-column mb-auto">
+    <ul class="nav nav-pills flex-column mb-auto" *appUserHasRole="['1', '2', '3']">
+        <li class="nav-item">
+            <a routerLink="/dashboard/main" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+            </a>
+        </li>
+    </ul>
+    <ul class="nav nav-pills flex-column mb-auto" *appUserHasRole="['1']">
+        <li class="nav-item">
+            <a routerLink="/dashboard/usuarios" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-users me-2"></i> Usuarios
+            </a>
+        </li>
+    </ul>
+    <ul class="nav nav-pills flex-column mb-auto" *appUserHasRole="['1', '2', '3']">
+        <li class="nav-item">
+            <a routerLink="/dashboard/materiales" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-prescription-bottle me-2"></i> Materiales
+            </a>
+        </li>
+    </ul>
+    <ul class="nav nav-pills flex-column mb-auto" *appUserHasRole="['1', '2', '3']">
+        <li class="nav-item">
+            <a routerLink="/dashboard/reactivos" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-flask me-2"></i> Reactivos
+            </a>
+        </li>
+    </ul>
+    <ul class="nav nav-pills flex-column mb-auto" *appUserHasRole="['1', '2', '3']">
+        <li class="nav-item">
+            <a routerLink="/dashboard/marcas" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-users"></i> Marcas
+            </a>
+        </li>
+    </ul>
+    <ul class="nav nav-pills flex-column mb-auto" *appUserHasRole="['1', '2', '3']">
+        <li class="nav-item">
+            <a routerLink="/dashboard/unidades-medida" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-ruler-combined me-2"></i> Unidades de Medida
+            </a>
+        </li>
+    </ul>
+    <ul class="nav nav-pills flex-column mb-auto" *appUserHasRole="['1', '2', '3']">
+        <li class="nav-item">
+            <a routerLink="/dashboard/ubicaciones" routerLinkActive="active" class="nav-link">
+                <i class="fas fa-th me-2"></i> Ubicaciones
+            </a>
+        </li>
+    </ul>
+    <!-- <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item" *ngFor="let route of routes">
             <a [routerLink]="route.path" routerLinkActive="active" class="nav-link">
                 <i [class]="route.faIcon"></i>{{ route.text }}
             </a>
         </li>
-    </ul>
+    </ul> -->
     <hr>
     <div class="dropdown" *ngIf="user">
         <a href="#" class="nav-link text-truncate text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">

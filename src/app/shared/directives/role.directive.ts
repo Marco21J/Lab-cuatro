@@ -6,22 +6,22 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 })
 export class RoleDirective implements OnInit {
 
-  @Input() roles!: number[];
+  @Input('appUserHasRole') roles!: string[];
   private isVisible = false;
+ /*  private roles!: number[]; */
 
   constructor(
-    private viewContainerRef: ViewContainerRef,
     private templateRef: TemplateRef<any>,
+    private viewContainerRef: ViewContainerRef,
     private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
-    console.log(this.roles);
     if (this.roles) {
       this.viewContainerRef.clear();
     }
     const userRol = this.authService.sessionObject.rol;
-    if (this.roles.includes(userRol.id)) {
+    if (this.roles.includes(userRol.id.toString())) {
       if (!this.isVisible) {
         this.isVisible = true;
         this.viewContainerRef.createEmbeddedView(this.templateRef);

@@ -14,6 +14,7 @@ import { ILoginResponse } from 'src/app/auth/models/interfaces';
 export class SidenavComponent implements OnDestroy {
 
   user!: ILoginResponse;
+  public testString = '1';
   private subscription = new Subscription();
 
   public routes: ISidenavRoute[] = [
