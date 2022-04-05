@@ -15,6 +15,10 @@ export class MarcaService {
     return this.http.get<IPaginateResponse<IMarcaRead>>(`/marcas/filter/?skip=${skip}&take=${take}&query=${query}`);
   }
 
+  public getAll(): Observable<IMarcaRead[]> {
+    return this.http.get<IMarcaRead[]>(`/marcas`);
+  }
+
   public createOne(body: IMarcaCreate): Observable<IMarcaRead> {
     return this.http.post<IMarcaRead>('/marcas', body);
   }

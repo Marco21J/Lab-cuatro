@@ -18,7 +18,7 @@ export class SidenavComponent implements OnDestroy {
 
   public routes: ISidenavRoute[] = [
     {
-      path: '/dashboard/olv',
+      path: '/dashboard/main',
       text: 'Dashboard',
       faIcon: 'fas fa-tachometer-alt me-2'
     },
@@ -28,9 +28,29 @@ export class SidenavComponent implements OnDestroy {
       faIcon: 'fas fa-users me-2'
     },
     {
+      path: '/dashboard/materiales',
+      text: 'Materiales',
+      faIcon: 'fas fa-prescription-bottle me-2',
+    },
+    {
+      path: '/dashboard/reactivos',
+      text: 'Reactivos',
+      faIcon: 'fas fa-flask me-2',
+    },
+    {
       path: '/dashboard/marcas',
       text: 'Marcas',
       faIcon: 'far fa-copyright me-2',
+    },
+    {
+      path: '/dashboard/unidades-medida',
+      text: 'Unidades de Medida',
+      faIcon: 'fas fa-ruler-combined me-2',
+    },
+    {
+      path: '/dashboard/ubicaciones',
+      text: 'Ubicaciones',
+      faIcon: 'fas fa-th me-2',
     }
   ];
 

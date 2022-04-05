@@ -143,8 +143,8 @@ export class MarcaMainComponent implements OnInit, OnDestroy {
       this.swas.hideLoading();
       this.marcas.forEach(m => {
         if (m.id === this.marcaId) {
-          m.nombre = nombre,
-          m.descripcion = descripcion
+          m.nombre = nombre;
+          m.descripcion = descripcion;
         }
       });
       this.swas.showAlertGeneric('Ok', 'Se guardaron los cambios', 'success');

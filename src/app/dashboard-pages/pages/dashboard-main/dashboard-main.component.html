@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-info" role="alert" *ngIf="reactivos.length === 0">
+            <strong>No hay reactivos! <a routerLink="/dashboard/reactivos/new">Agregar reactivos</a></strong>
+        </div>
+    </div>
+    <div class="col-md-12" *ngIf="reactivos.length > 0">
+        <h4>Reactivos</h4>
+        <div class="row row-cols-1 row-cols-md-3 g-4 mt-1">
+            <div class="col" *ngFor="let reactivo of reactivos">
+                <app-reactivo-card [reactivo]="reactivo"></app-reactivo-card>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="alert alert-info" role="alert" *ngIf="reactivos.length === 0">
+            <strong>No hay materiales! <a routerLink="/dashboard/materiales/new">Agregar materiales</a></strong>
+        </div>
+    </div>
+    <div class="col-md-12" *ngIf="materiales.length > 0">
+        <h4>Materiales</h4>
+        <div class="row row-cols-1 row-cols-md-3 g-4 mt-1">
+            <div class="col" *ngFor="let material of materiales">
+                <app-material-card [material]="material"></app-material-card>
+            </div>
+        </div>
+    </div>
+</div>

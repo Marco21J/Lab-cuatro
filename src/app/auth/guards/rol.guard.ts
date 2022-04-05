@@ -19,6 +19,10 @@ export class RolGuard implements CanActivate {
     state: RouterStateSnapshot): boolean {
     if (this.authService.isAuthenticated() && route.data.roles) {
       const userRol = this.authService.getUserSession();
+      if (!(userRol && userRol.rol)) {
+        this.router.navigateByUrl('/forbidden');
+        return false;
+      }
       const roles = route.data.roles as RolEnum[];
       const isAllowed = roles.includes(userRol.rol.id); 
       if (isAllowed) {

@@ -34,7 +34,47 @@ const routes: Routes = [
         data: {
           roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
         }
-      }
+      },
+      {
+        path: 'unidades-medida',
+        loadChildren: () => import('../unidades-medida/unidades-medida.module').then(m => m.UnidadesMedidaModule),
+        canActivate: [RolGuard],
+        data: {
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+        }
+      },
+      {
+        path: 'ubicaciones',
+        loadChildren: () => import('../ubicaciones/ubicaciones.module').then(m => m.UbicacionesModule),
+        canActivate: [RolGuard],
+        data: {
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+        }
+      },
+      {
+        path: 'materiales',
+        loadChildren: () => import('../materiales/materiales.module').then(m => m.MaterialesModule),
+        canActivate: [RolGuard],
+        data: {
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+        }
+      },
+      {
+        path: 'reactivos',
+        loadChildren: () => import('../reactivos/reactivos.module').then(m => m.ReactivosModule),
+        canActivate: [RolGuard],
+        data: {
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+        }
+      },
+      {
+        path: 'main',
+        loadChildren: () => import('../dashboard-pages/dashboard-pages.module').then(m => m.DashboardPagesModule),
+        canActivate: [RolGuard],
+        data: {
+          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO]
+        }
+      },
     ]
   },
 ];

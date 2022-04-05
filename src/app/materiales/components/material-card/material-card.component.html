@@ -1,0 +1,11 @@
+<div class="card h-100">
+    <div class="card-body text-white" [ngClass]="{ 'bg-success': cardSuccess, 'bg-danger': cardDanger, 'bg-warning': cardWarning}">
+        <h5 class="card-title">
+            <a class="text-white" [routerLink]="['/dashboard/materiales/detail/', material.id]">{{ material.nombre }}</a>
+        </h5>
+        <p class="card-text">
+            {{ material.desripcion }}
+            <br> <strong>Cantidad:</strong> {{ material.cantidad }}
+        </p>
+    </div>
+</div>
