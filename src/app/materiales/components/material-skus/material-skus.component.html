@@ -1,6 +1,6 @@
 <div class="row">
     <h5 class="text-center">Skus</h5>
-    <div class="col-md-12">
+    <div class="col-md-12" *appUserHasRole="[1, 2]">
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group" role="group" aria-label="First group">
                 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop" (click)="onRegister()">
@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="col-md-12">
-        <div class="table-responsive">
+        <div class="table-responsive" *appUserHasRole="[1, 2]">
             <table class="table">
                 <thead>
                     <tr>
@@ -39,6 +39,24 @@
                                 </div>
                             </div>
                         </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-responsive" *appUserHasRole="[3]">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Valor</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let sku of skus; let i = index;">
+                        <th></th>
+                        <td>{{ sku.valor }}</td>
+                        <td>{{ sku.desripcion }}</td>
                     </tr>
                 </tbody>
             </table>

@@ -10,6 +10,7 @@ import { ReactivoEditComponent } from './pages/reactivo-edit/reactivo-edit.compo
 import { ReactivoDetailComponent } from './pages/reactivo-detail/reactivo-detail.component';
 import { ReactivoSkusComponent } from './components/reactivo-skus/reactivo-skus.component';
 import { ReactivoCardComponent } from './components/reactivo-card/reactivo-card.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { ReactivoCardComponent } from './components/reactivo-card/reactivo-card.
     CommonModule,
     ReactivosRoutingModule,
     ReactiveFormsModule,
-    DataTablesModule
+    DataTablesModule,
+    SharedModule
   ],
   exports: [
     ReactivoCardComponent
