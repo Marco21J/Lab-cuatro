@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 })
 export class RoleDirective implements OnInit {
 
-  @Input('appUserHasRole') roles!: string[];
+  @Input('appUserHasRole') roles!: number[];
   private isVisible = false;
  /*  private roles!: number[]; */
 
@@ -21,7 +21,7 @@ export class RoleDirective implements OnInit {
       this.viewContainerRef.clear();
     }
     const userRol = this.authService.sessionObject.rol;
-    if (this.roles.includes(userRol.id.toString())) {
+    if (this.roles.includes(userRol.id)) {
       if (!this.isVisible) {
         this.isVisible = true;
         this.viewContainerRef.createEmbeddedView(this.templateRef);

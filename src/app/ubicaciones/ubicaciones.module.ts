@@ -5,6 +5,7 @@ import { UbicacionesRoutingModule } from './ubicaciones-routing.module';
 import { UbicacionMainComponent } from './pages/ubicacion-main/ubicacion-main.component';
 import { DataTablesModule } from 'angular-datatables';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     UbicacionesRoutingModule,
     DataTablesModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class UbicacionesModule { }

@@ -46,26 +46,14 @@ const routes: Routes = [
       {
         path: 'ubicaciones',
         loadChildren: () => import('../ubicaciones/ubicaciones.module').then(m => m.UbicacionesModule),
-        canActivate: [RolGuard],
-        data: {
-          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO, RolEnum.DOCENTE]
-        }
       },
       {
         path: 'materiales',
         loadChildren: () => import('../materiales/materiales.module').then(m => m.MaterialesModule),
-        canActivate: [RolGuard],
-        data: {
-          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO, RolEnum.DOCENTE]
-        }
       },
       {
         path: 'reactivos',
         loadChildren: () => import('../reactivos/reactivos.module').then(m => m.ReactivosModule),
-        canActivate: [RolGuard],
-        data: {
-          roles: [RolEnum.ADMIN, RolEnum.LABORATORIO, RolEnum.DOCENTE]
-        }
       },
       {
         path: 'main',
